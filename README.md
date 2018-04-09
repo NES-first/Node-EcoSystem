@@ -1,18 +1,18 @@
-Storj Share Daemon
+NES Share Daemon
 ==================
 
-[![Build Status](https://img.shields.io/travis/Storj/storjshare-daemon.svg?style=flat-square)](https://travis-ci.org/Storj/storjshare-daemon)
-[![Coverage Status](https://img.shields.io/coveralls/Storj/storjshare-daemon.svg?style=flat-square)](https://coveralls.io/r/Storj/storjshare-daemon)
-[![NPM](https://img.shields.io/npm/v/storjshare-daemon.svg?style=flat-square)](https://www.npmjs.com/package/storjshare-daemon)
-[![License](https://img.shields.io/badge/license-AGPL3.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Storj/storjshare-daemon/master/LICENSE)
-[![Docker](https://img.shields.io/badge/docker-ready-blue.svg?style=flat-square)](https://store.docker.com/community/images/computeronix/storjshare-daemon)
+[![Build Status](https://img.shields.io/travis/nes/nesshare-daemon.svg?style=flat-square)](https://travis-ci.org/nes/nesshare-daemon)
+[![Coverage Status](https://img.shields.io/coveralls/nes/nesshare-daemon.svg?style=flat-square)](https://coveralls.io/r/nes/nesshare-daemon)
+[![NPM](https://img.shields.io/npm/v/nesshare-daemon.svg?style=flat-square)](https://www.npmjs.com/package/nesshare-daemon)
+[![License](https://img.shields.io/badge/license-AGPL3.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/nes/nesshare-daemon/master/LICENSE)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg?style=flat-square)](https://store.docker.com/community/images/computeronix/nesshare-daemon)
 
-Daemon + CLI for farming data on the Storj network, suitable for standalone
+Daemon + CLI for farming data on the nes network, suitable for standalone
 use or inclusion in other packages.
 
 ## Installation via Arch User Repositories
 
-storjshare daemon is also available for Arch Linux as a package on the AUR as [storjshare-daemon](https://aur.archlinux.org/packages/storjshare-daemon/). Install it via your favourite AUR helper.
+nesshare daemon is also available for Arch Linux as a package on the AUR as [nesshare-daemon](https://aur.archlinux.org/packages/nesshare-daemon/). Install it via your favourite AUR helper.
 
 ## Manual Installation
 
@@ -85,18 +85,18 @@ Once build dependencies have been installed for your platform, install the
 package globally using Node Package Manager:
 
 ```
-npm install --global storjshare-daemon
+npm install --global nesshare-daemon
 ```
 
 ## Usage (CLI)
 
-Once installed, you will have access to the `storjshare` program, so start by
+Once installed, you will have access to the `nesshare` program, so start by
 asking it for some help.
 
 ```
-storjshare --help
+nesshare --help
 
-  Usage: storjshare [options] [command]
+  Usage: nesshare [options] [command]
 
 
   Commands:
@@ -121,16 +121,16 @@ storjshare --help
 You can also get more detailed help for a specific command.
 
 ```
-storjshare help create
+nesshare help create
 
-  Usage: storjshare-create [options]
+  Usage: nesshare-create [options]
 
   generates a new share configuration
 
   Options:
 
     -h, --help                 output usage information
-    --storj <addr>             specify the STORJ address (required)
+    --nes <addr>             specify the nes address (required)
     --key <privkey>            specify the private key
     --storage <path>           specify the storage path
     --size <maxsize>           specify share size (ex: 10GB, 1TB)
@@ -147,7 +147,7 @@ storjshare help create
 
 ## Usage (Programmatic)
 
-The Storj Share daemon uses a local [dnode](https://github.com/substack/dnode)
+The nes Share daemon uses a local [dnode](https://github.com/substack/dnode)
 server to handle RPC message from the CLI and other applications. Assuming the
 daemon is running, your program can communicate with it using this interface.
 The example that follows is using Node.js, but dnode is implemented in many
@@ -173,20 +173,20 @@ You can also easily start the daemon from your program by creating a dnode
 server and passing it an instance of the `RPC` class exposed from this package.
 
 ```js
-const storjshare = require('storjshare-daemon');
+const nesshare = require('nesshare-daemon');
 const dnode = require('dnode');
-const api = new storjshare.RPC();
+const api = new nesshare.RPC();
 
 dnode(api.methods).listen(45015, '127.0.0.1');
 ```
 
 ## Configuring the Daemon
 
-The Storj Share daemon loads configuration from anywhere the
+The nes Share daemon loads configuration from anywhere the
 [rc](https://www.npmjs.com/package/rc) package can read it. The first time you
-run the daemon, it will create a directory in `$HOME/.config/storjshare`, so
+run the daemon, it will create a directory in `$HOME/.config/nesshare`, so
 the simplest way to change the daemon's behavior is to create a file at
-`$HOME/.config/storjshare/config` containing the following:
+`$HOME/.config/nesshare/config` containing the following:
 
 ```json
 {
@@ -203,65 +203,65 @@ detailed explanation of these properties.
 ## Debugging the Daemon
 
 The daemon logs activity to the configured log file, which by default is
-`$HOME/.config/storjshare/logs/daemon.log`. However if you find yourself
+`$HOME/.config/nesshare/logs/daemon.log`. However if you find yourself
 needing to frequently restart the daemon and check the logs during
 development, you can run the daemon as a foreground process for a tighter
 feedback loop.
 
 ```
-storjshare killall
-storjshare daemon --foreground
+nesshare killall
+nesshare daemon --foreground
 ```
 
 ## Connecting to a remote Daemon
 
-**Note: Exposing your storjshare-daemon to the Internet is a bad idea
+**Note: Exposing your nesshare-daemon to the Internet is a bad idea
 as everybody could read your Private Key!**
 
 To connect to a remote running daemon instance you will first need to
 ensure this daemon is running on a different address than the default
 `127.0.0.1`. This can be achieved by [configuring the Daemon](#configuring-the-daemon).
 
-After your storjshare-daemon is reachable (eg. within your home network)
+After your nesshare-daemon is reachable (eg. within your home network)
 you can use `-r` or `--remote` option (on supported commands) to use the
 specified IP/hostname and port to connect to, instead of `127.0.0.1`.
 
-**Note that this option does not support to start the storjshare-daemon
+**Note that this option does not support to start the nesshare-daemon
 on a different system, only connect to an already running one!**
 
 Example to connect to remote daemon running on `192.168.0.10` on the default port (`45015`) and show the status:
 
 ```
-storjshare status --remote 192.168.0.10
+nesshare status --remote 192.168.0.10
 ```
 
 If the port is changed, just append it like so:
 
 ```
-storjshare status --remote 192.168.0.10:51000
+nesshare status --remote 192.168.0.10:51000
 ```
 
-## Migrating from [`storjshare-gui`](https://github.com/storj/storjshare-gui) or [`storjshare-cli`](https://github.com/storj/storjshare-cli)
-#### storjshare-gui
-If you are using the `storjshare-gui` package you can go on with the latest
+## Migrating from [`nesshare-gui`](https://github.com/nes/nesshare-gui) or [`nesshare-cli`](https://github.com/nes/nesshare-cli)
+#### nesshare-gui
+If you are using the `nesshare-gui` package you can go on with the latest
 GUI release. You don't need to migrate but if you like you can do it. If you
-choose to migrate from the old storjshare-gui to the CLI version of
-storjshare-daemon, please follow the instructions below.
+choose to migrate from the old nesshare-gui to the CLI version of
+nesshare-daemon, please follow the instructions below.
 
-#### storjshare-cli
-Storj Share provides a simple method for creating new shares, but if you were
-previously using the `storjshare-cli` package superceded by this one, you'll
+#### nesshare-cli
+nes Share provides a simple method for creating new shares, but if you were
+previously using the `nesshare-cli` package superceded by this one, you'll
 want to migrate your configuration to the new format. To do this, first you'll
 need to dump your private key **before** installing this package.
 
-> If you accidentally overwrote your old `storjshare-cli` installation with
+> If you accidentally overwrote your old `nesshare-cli` installation with
 > this package, don't worry - just reinstall the old package to dump the key,
 > then reinstall this package.
 
 ### Step 0: Dump Your Private Key
 
-#### storjshare-gui
-Open `%AppData%\Storj Share\settings.json` in any texteditor.
+#### nesshare-gui
+Open `%AppData%\nes Share\settings.json` in any texteditor.
 For each GUI drive you will find the private key and the dataDir. Use these
 information and go on with Step 1 and 2.
 ```
@@ -271,57 +271,57 @@ information and go on with Step 1 and 2.
       "key": "4154e85e87b323611cba45ab1cd51203f2508b1da8455cdff8b641cce827f3d6",
       "address": "0xfB691...",
       "storage": {
-        "dataDir": "D:\\Storj\\storjshare-5f4722"
+        "dataDir": "D:\\nes\\nesshare-5f4722"
       }
     },
     {
       "key": "0b0341a9913bb84b51485152a1b0a8a6ed68fa4f9a4fedb26c61ff778ce61ec8",
       "address": "0xfB691...",
       "storage": {
-        "dataDir": "D:\\Storj\\storjshare-48a1c4"
+        "dataDir": "D:\\nes\\nesshare-48a1c4"
       }
   ],
   "appSettings": {...}
 }
 ```
 
-#### storjshare-cli
-You can print your cleartext private key from storjshare-cli, using the
+#### nesshare-cli
+You can print your cleartext private key from nesshare-cli, using the
 `dump-key` command:
 
 ```
-storjshare dump-key
- [...]  > Unlock your private key to start storj  >  ********
+nesshare dump-key
+ [...]  > Unlock your private key to start nes  >  ********
 
  [info]   Cleartext Private Key:
  [info]   ======================
  [info]   4154e85e87b323611cba45ab1cd51203f2508b1da8455cdff8b641cce827f3d6
  [info]   
- [info]   (This key is suitable for importing into Storj Share GUI)
+ [info]   (This key is suitable for importing into nes Share GUI)
 ```
 
 If you are using a custom data directory, be sure to add the `--datadir <path>`
 option to be sure you get the correct key. Also be sure to note your defined
 payout address and data directory.
 
-### Step 1: Install Storj Share and Create Config
+### Step 1: Install nes Share and Create Config
 
 Now that you have your private key, you can generate a new configuration file.
-To do this, first install the `storjshare-daemon` package globally and use the
-`create` command. You'll need to remove the `storjshare-cli` package first, so
+To do this, first install the `nesshare-daemon` package globally and use the
+`create` command. You'll need to remove the `nesshare-cli` package first, so
 make sure you perform the previous step for all shared drives before
 proceeding forward.
 
 ```
-npm remove -g storjshare-cli
-npm install -g storjshare-daemon
+npm remove -g nesshare-cli
+npm install -g nesshare-daemon
 ```
 
-Now that you have Storj Share installed, use the `create` command to generate
+Now that you have nes Share installed, use the `create` command to generate
 your configuration.
 
 ```
-storjshare create --key 4154e8... --storj 0xfB691... --storage <datadir> -o <writepath>
+nesshare create --key 4154e8... --nes 0xfB691... --storage <datadir> -o <writepath>
 ```
 
 This will generate your configuration file given the parameters you passed in,
@@ -335,30 +335,30 @@ Now that you have successfully migrated your configuration file, you can use
 it to start the share.
 
 ```
-storjshare start --config path/to/config.json
+nesshare start --config path/to/config.json
 
   * daemon is not running, starting...
 
   * starting share with config at path/to/config.json
 ```
 
-#### Updating storjshare and restoring sessions
+#### Updating nesshare and restoring sessions
 
-If you want to upgrade storjshare you can save your current session and
+If you want to upgrade nesshare you can save your current session and
 reload it after updating
 
 ```
-storjshare save
-storjshare killall
-npm install -g storjshare-daemon
-storjshare daemon &
-storjshare load
+nesshare save
+nesshare killall
+npm install -g nesshare-daemon
+nesshare daemon &
+nesshare load
 ```
 
 ## License
 
-Storj Share - Daemon + CLI for farming data on the Storj network.  
-Copyright (C) 2017 Storj Labs, Inc
+nes Share - Daemon + CLI for farming data on the nes network.  
+Copyright (C) 2017 nes Labs, Inc
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
